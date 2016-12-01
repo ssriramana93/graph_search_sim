@@ -2,6 +2,7 @@
 
 BranchBase::BranchBase(ros::NodeHandle& n,Graph& graph,vertexName start_vertex): n_(n),map(graph) {
   std::shared_ptr<Node>  start_node= std::make_shared<Node>(start_vertex,0.0,0.0,0.0);
+
   updateVisited(start_vertex);
   node_list.push_back(start_node);
   unexplored_nodes = map.size();
@@ -74,8 +75,7 @@ void BranchBase::update(vertexName name) {
 
   node_ptr->stamp = *(timestamps_.rbegin());
   node_ptr->position_ = node_list.size();
-  node_ptr->previous_position_ = getPreviousDistance(name);
-  //std::cout<<"AAAA:\t"<<name<<"\t"<<node_ptr->stamp<<std::endl;
+  node_ptr->previous_offset_ = (double)getPreviousDistance(name);
   node_list.push_back(node_ptr);
 
   visited_nodes[name].second = node_ptr;
@@ -87,8 +87,13 @@ const double BranchBase::getunexploredcost() const{
   return unexplored_penality*map.unvisited_edge_count_;
 }
 
-const double BranchBase::getTotalCost() const {
+const double BranchBase::getTrueCost() const {
+ // std::cout<<"OdomUnc: "<<odom_unc_cost<<"Dist: "<<distance<<"UnexploredCost: "<<getunexploredcost()<<std::endl;
   return(odom_unc_cost + distance + getunexploredcost());
+}
+
+const double BranchBase::getTotalCost() const {
+  return (getTrueCost() + getHeuristics());
 }
 
 const std::shared_ptr<Node> BranchBase::getLatestNode() const {
@@ -100,7 +105,7 @@ void BranchBase::printNodes() {
   for(auto const node: node_list) {
     std::cout<<node->name_<<" ";
   }
-  std::cout<<"]";
+  std::cout<<"]"<<std::endl;
 }
 
 double BranchBase::updateDistance(vertexName name) {
@@ -108,11 +113,13 @@ double BranchBase::updateDistance(vertexName name) {
 }
 
 size_t BranchBase::getPreviousDistance(vertexName v) {
+  if(visited_nodes[v].first <= 1) return 10000;
   return node_list.size() - visited_nodes[v].second->position_;
 }
 
 const double BranchBase::getHeuristics() const {
-  return -1000*(getLatestNode()->previous_position_);
+  if(!node_list.size()) return(0);
+  return /*map.unvisited_distance;*/-100*(double)(getLatestNode()->previous_offset_);
 }
 
 BranchBase:: ~BranchBase() {

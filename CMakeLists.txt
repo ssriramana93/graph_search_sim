@@ -126,7 +126,8 @@ catkin_package(
 # include_directories(include)
 
 include_directories(
-  include
+  include 
+  include/gnuplot-cpp
   ${catkin_INCLUDE_DIRS}
   ${GTSAM_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
@@ -142,6 +143,7 @@ add_library(graph_search_sim
   include/graph_search_sim/graph_search.h
   include/graph_search_sim/graph.h
   include/graph_search_sim/graph_common.h
+  include/gnuplot-cpp/gnuplot_i.hpp
  
   src/node.cpp
   src/branch_base.cpp

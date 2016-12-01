@@ -50,10 +50,10 @@ void Branch::updateOdom(vertexName name) {
 double Branch::cov(Graph& map,std::pair<vertexName,vertexName>& edge,bool close_loop,ros::Time lp_timestamp) {
   double time_tolerance = 1.e-02;
   gtsam::Vector sigmas(6);
-  double sigma = 0.01;
+  double sigma = 0.7;
  // sigmas<<0.1,0.1,0.1,0.1,0.1,0.1;
 
-  sigmas<<sigma,sigma,sigma,sigma,sigma,sigma;
+  sigmas<<sigma,sigma,0*sigma,0*sigma,0*sigma,sigma;
 
   mapping::Odometry odomreadings;
   mapping::Timestamps timestamps;
@@ -165,14 +165,19 @@ double Branch::cov(Graph& map,std::pair<vertexName,vertexName>& edge,bool close_
   else {
     pose_with_cov_ = mapping::optimization::computeCovariances(factor_graph_,initial_guess_);
   }*/
-  double det = 0.0;
+  double total_det = 0.0,max_det = -10000,avg_det = 0.0;
   for (auto const iter:pose_with_cov_) {
-    det += iter.second.determinant();
-  }
+    auto det = iter.second.determinant();
+    total_det += det;
+    if(max_det < det) {
+      max_det = det;
+    }
+   }
+  avg_det = total_det/pose_with_cov_.size();
  // initial_guess_.clear();
   solution_.clear();
-  std::cout << "CCost: "<<det<<std::endl;
-  return det;
+  std::cout << "CCost: "<<total_det<<std::endl;
+  return max_det;
 }
 
 

@@ -25,7 +25,7 @@ public:
   };
   std::map<std::pair<vertexName,vertexName>,int,compareEdge> edge_count_;
   size_t unvisited_edge_count_ = 0;
-
+  double unvisited_distance = 0;
 
   Graph(ros::NodeHandle& n):n_(n) {
   }
@@ -35,11 +35,11 @@ public:
     unvisited_edge_count_ = getUnvisitedEdgeCount();
   }
 
-  Graph(const Graph& graph):n_(graph.n_),edge_count_(graph.edge_count_),unvisited_edge_count_(graph.unvisited_edge_count_) {
+  Graph(const Graph& graph):n_(graph.n_),edge_count_(graph.edge_count_),unvisited_edge_count_(graph.unvisited_edge_count_),unvisited_distance(graph.unvisited_distance) {
     setData(graph.data());
   }
 
-  void addNodeWithEdges(vertexName name,std::vector<vertexName> edges,std::vector<EdgeType> weight) {
+  void addNodeWithEdges(vertexName name,std::vector<vertexName> edges,std::vector<EdgeType> data) {
     std::map<vertexName,EdgeType> edge_list;
 
     for(size_t i = 0; i < edges.size(); i++ ) {
@@ -52,8 +52,9 @@ public:
 
 
         edge_count_.insert(std::make_pair(std::make_pair(name,edges[i]),0));
+        unvisited_distance += data[i].weight;
       }
-      edge_list.insert(std::make_pair(edges[i],weight[i]));
+      edge_list.insert(std::make_pair(edges[i],data[i]));
     }
     data_.insert(std::make_pair(name,edge_list));
     printEdgeCount();
@@ -129,6 +130,7 @@ public:
       throw std::runtime_error("Edge edge does not exist in count!!");
     }
     if(!iter->second) {
+      unvisited_distance -= at(v1,v2).weight;
        --unvisited_edge_count_;
     }
     iter->second++;
@@ -164,6 +166,8 @@ public:
          }
     }
   }
+
+
 };
 
 #endif

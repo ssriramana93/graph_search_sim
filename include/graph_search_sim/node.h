@@ -18,13 +18,13 @@ public:
   vertexName name_;
   double odomUnc_;
 
-  double distance_;
-  size_t visit_count_;
+  double distance_ = 0;
+  size_t visit_count_ = 0;
 //  mapping::Odometry odomreadings;
 //  nav_msgs::Odometry current_pose;
-  ros::Time stamp;
-  size_t position_;
-  size_t previous_position_;
+  ros::Time stamp = ros::Time(0);
+  size_t position_ = 0;
+  size_t previous_offset_ = 0.0;
   Node();
   Node(vertexName name,double odomUnc,double distance,size_t visit_count);
 };

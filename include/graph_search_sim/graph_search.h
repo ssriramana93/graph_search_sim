@@ -8,8 +8,11 @@
 #include <mutex>
 #include <vector>
 #include <map>
+#include <fstream>
 #include <queue>
+#include <limits>
 
+#include "gnuplot_i.hpp"
 #include <graph_search_sim/graph.h>
 #include <graph_search_sim/node.h>
 #include <graph_search_sim/branch.h>
@@ -24,12 +27,16 @@ public:
   ros::NodeHandle n_;
   Graph map_;
   vertexName start_name_;
-  double best_score_ = 1e+10;
+  double best_score_ = std::numeric_limits<double>::max();
   std::shared_ptr<Branch> best_branch_;
   std::priority_queue<Branch,std::vector<Branch >,compareBranch> queue_;
-
+  std::vector<double> collect_cost,collect_best;
+  std::ofstream output_file;
+  std::ostream_iterator<double> output_iterator;
+  Gnuplot gp,gp2;
   GraphSearch(ros::NodeHandle& n,Graph& map,vertexName start_name);
   void calcBestPath();
+  void plotResults();
 
 };
 

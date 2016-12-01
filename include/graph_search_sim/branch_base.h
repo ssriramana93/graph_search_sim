@@ -27,7 +27,7 @@ protected:
   Graph map;
   double odom_unc_cost = 0.0,
          distance = 0.0,
-         unexplored_penality = 1.0e+05;
+         unexplored_penality = 1.0e+09;
      //    unexplored_cost = 0.0;
   size_t total_visit_allowed = 3;
 
@@ -59,6 +59,7 @@ public:
   void updateVisited(vertexName name);
   void update(vertexName vertex);
   const double getTotalCost() const;
+  const double getTrueCost() const;
   const double getunexploredcost() const;
   const std::shared_ptr<Node> getLatestNode() const;
   void printNodes();
