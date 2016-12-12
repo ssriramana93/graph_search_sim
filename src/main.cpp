@@ -70,16 +70,21 @@ int main(int argc, char *argv[]) {
   ros::NodeHandle n;
   std::cout<<"Program Entered"<<std::endl;
   Graph map(n);
+
   std::cout<<"Map created"<<std::endl;
   creategraph(map);
   std::cout<<"Create Graph"<<std::endl;
+ // std::vector<vertexName> cpp_path;
+ // map.getChinesePostmanPath("A",cpp_path);
   vertexName start_name = "A";
   std::cout<<"start name"<<std::endl;;
   GraphSearch gs(n,map,start_name);
   std::cout<<"Graph search inited"<<std::endl;
   gs.calcBestPath();
+//  gs.calcBestBnBPath();
+
   std::cout<<"calcBestPath"<<std::endl;
-  std::cout<<"BestScore"<<gs.best_score_<<std::endl;
+  std::cout<<"BestScore"<<gs.best_score_<<"\tBest Iter\t"<<gs.best_iter_<<std::endl;
   gs.best_branch_->printNodes();
   return 0;
 

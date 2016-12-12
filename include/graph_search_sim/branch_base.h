@@ -18,7 +18,7 @@
 
 class BranchBase {
 
-protected:
+public:
   typedef std::vector<std::shared_ptr<Node> > NodeList;
 
 
@@ -27,9 +27,11 @@ protected:
   Graph map;
   double odom_unc_cost = 0.0,
          distance = 0.0,
-         unexplored_penality = 1.0e+09;
+         unexplored_penality = 1.0e+9,
+         max_odom_cost = 0.0;
      //    unexplored_cost = 0.0;
-  size_t total_visit_allowed = 3;
+  size_t total_visit_allowed = 2;
+  double max_odom_unc = 100000000000000000000000000.0;
 
 
 
@@ -40,7 +42,6 @@ protected:
 
   ros::NodeHandle n_;
 
-public:
   bool please_kill_me = false;
 
   gtsam::NonlinearFactorGraph factor_graph_;

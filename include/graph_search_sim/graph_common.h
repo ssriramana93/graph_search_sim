@@ -1,6 +1,6 @@
 #ifndef GRAPH_COMMON_H
 #define GRAPH_COMMON_H
-
+#include <algorithm>
 
 #include <gtsam/nonlinear/NonlinearFactor.h>
 #include <gtsam/nonlinear/NonlinearFactorGraph.h>

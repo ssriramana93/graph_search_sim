@@ -163,7 +163,7 @@ add_library(graph_search_sim
 # add_dependencies(graph_search_sim ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_executable(graph_search_sim_node src/main.cpp)
+add_executable(graph_search_sim_node main.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above

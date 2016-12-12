@@ -19,7 +19,11 @@ void Branch::updateOdom(vertexName name) {
   size_t count = visited_nodes[name].first;
   auto latest_node = getLatestNode();
   double odomUnc = 0.0;
-  if(count > 1 and count <= total_visit_allowed) {
+  if(count > 1 /*and count <= total_visit_allowed*/) {
+    if(count > total_visit_allowed)  {
+      please_kill_me = true;
+   //   return;
+    }
     ros::Time lp_timestamp = visited_nodes[name].second->stamp;
     auto edge = std::make_pair(latest_node->name_,name);
   //  std::cout<<"LPcl"<<lp_timestamp<<"\t"<<*(timestamps_.rbegin())<<std::endl;
@@ -36,7 +40,7 @@ void Branch::updateOdom(vertexName name) {
     odom_unc_cost = cov(map,edge,false,ros::Time::now());
 
   }
-  else please_kill_me = true;
+//  else please_kill_me = true;
 
  // return odomUnc;
 }
@@ -50,10 +54,10 @@ void Branch::updateOdom(vertexName name) {
 double Branch::cov(Graph& map,std::pair<vertexName,vertexName>& edge,bool close_loop,ros::Time lp_timestamp) {
   double time_tolerance = 1.e-02;
   gtsam::Vector sigmas(6);
-  double sigma = 0.7;
+  double sigma = 0.1;
  // sigmas<<0.1,0.1,0.1,0.1,0.1,0.1;
 
-  sigmas<<sigma,sigma,0*sigma,0*sigma,0*sigma,sigma;
+  sigmas<<sigma,sigma,sigma,sigma,sigma,sigma;
 
   mapping::Odometry odomreadings;
   mapping::Timestamps timestamps;

@@ -31,6 +31,7 @@ BranchBase::BranchBase(const BranchBase& branch_base):
     odom_unc_cost(branch_base.odomUncCost()),
     distance(branch_base.Distance()),
     unexplored_nodes(branch_base.unexplored_nodes),
+    max_odom_cost(branch_base.max_odom_cost),
    // unexplored_cost(branch_base.unexploredCost()),
     unexplored_penality(branch_base.unexploredPenality()),
     total_visit_allowed(branch_base.totalVisitAllowed()),
@@ -79,6 +80,12 @@ void BranchBase::update(vertexName name) {
   node_list.push_back(node_ptr);
 
   visited_nodes[name].second = node_ptr;
+  if(odom_unc_cost > max_odom_unc) {
+    please_kill_me = true;
+  }
+  if(max_odom_cost < odom_unc_cost) {
+    max_odom_cost = odom_unc_cost;
+  }
 }
 
 const double BranchBase::getunexploredcost() const{
@@ -88,8 +95,8 @@ const double BranchBase::getunexploredcost() const{
 }
 
 const double BranchBase::getTrueCost() const {
- // std::cout<<"OdomUnc: "<<odom_unc_cost<<"Dist: "<<distance<<"UnexploredCost: "<<getunexploredcost()<<std::endl;
-  return(odom_unc_cost + distance + getunexploredcost());
+// std::cout<<"OdomUnc: "<<odom_unc_cost<<"Dist: "<<distance<<"UnexploredCost: "<<getunexploredcost()<<"\tMaxOdomCost\t"<<max_odom_cost<<std::endl;
+  return(/*odom_unc_cost*/max_odom_cost + distance + getunexploredcost());
 }
 
 const double BranchBase::getTotalCost() const {
@@ -113,13 +120,13 @@ double BranchBase::updateDistance(vertexName name) {
 }
 
 size_t BranchBase::getPreviousDistance(vertexName v) {
-  if(visited_nodes[v].first <= 1) return 10000;
+  if(visited_nodes[v].first <= 1) return 1000000;
   return node_list.size() - visited_nodes[v].second->position_;
 }
 
 const double BranchBase::getHeuristics() const {
   if(!node_list.size()) return(0);
-  return /*map.unvisited_distance;*/-100*(double)(getLatestNode()->previous_offset_);
+  return /*map.unvisited_distance;*/-1e+07*(double)(getLatestNode()->previous_offset_);
 }
 
 BranchBase:: ~BranchBase() {
