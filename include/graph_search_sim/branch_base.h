@@ -27,7 +27,7 @@ public:
   Graph map;
   double odom_unc_cost = 0.0,
          distance = 0.0,
-         unexplored_penality = 1.0e+9,
+         unexplored_penality = 1.0e+14,
          max_odom_cost = 0.0;
      //    unexplored_cost = 0.0;
   size_t total_visit_allowed = 2;

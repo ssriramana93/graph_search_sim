@@ -100,7 +100,7 @@ const double BranchBase::getTrueCost() const {
 }
 
 const double BranchBase::getTotalCost() const {
-  return (getTrueCost() + getHeuristics());
+  return (getTrueCost() + 0*getHeuristics());
 }
 
 const std::shared_ptr<Node> BranchBase::getLatestNode() const {

@@ -77,11 +77,11 @@ int main(int argc, char *argv[]) {
  // std::vector<vertexName> cpp_path;
  // map.getChinesePostmanPath("A",cpp_path);
   vertexName start_name = "A";
-  std::cout<<"start name"<<std::endl;;
+  std::cout<<"start name"<<std::endl;
   GraphSearch gs(n,map,start_name);
   std::cout<<"Graph search inited"<<std::endl;
-  gs.calcBestPath();
-//  gs.calcBestBnBPath();
+ // gs.calcBestPath();
+  gs.calcBestBnBPath();
 
   std::cout<<"calcBestPath"<<std::endl;
   std::cout<<"BestScore"<<gs.best_score_<<"\tBest Iter\t"<<gs.best_iter_<<std::endl;

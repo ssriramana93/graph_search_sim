@@ -54,7 +54,7 @@ void Branch::updateOdom(vertexName name) {
 double Branch::cov(Graph& map,std::pair<vertexName,vertexName>& edge,bool close_loop,ros::Time lp_timestamp) {
   double time_tolerance = 1.e-02;
   gtsam::Vector sigmas(6);
-  double sigma = 0.1;
+  double sigma = 0.3;
  // sigmas<<0.1,0.1,0.1,0.1,0.1,0.1;
 
   sigmas<<sigma,sigma,sigma,sigma,sigma,sigma;
